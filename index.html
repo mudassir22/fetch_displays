@@ -14,13 +14,15 @@
 </head>
 <body>
 
+<div>
+    <button onclick="fetchData()">Fetch Data</button>
+</div>
+
 <div id="data-container">
     <!-- Display data here -->
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', fetchData);
-
     function fetchData() {
         // Use the GET method explicitly
         fetch('https://dbc2-122-160-48-182.ngrok-free.app/displayInfo/', {
