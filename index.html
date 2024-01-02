@@ -22,22 +22,23 @@
     document.addEventListener('DOMContentLoaded', fetchData);
 
     function fetchData() {
-        fetch('https://dbc2-122-160-48-182.ngrok-free.app/displayInfo/')
+        // Use the GET method explicitly
+        fetch('https://9640-122-160-48-182.ngrok-free.app/displayInfo/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any additional headers if needed
+            },
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                return response.text();
+                return response.json();
             })
             .then(data => {
                 console.log('Received data:', data);
-                try {
-                    const jsonData = JSON.parse(data);
-                    displayData(jsonData);
-                } catch (error) {
-                    console.error('Error parsing JSON:', error);
-                    displayError('Error parsing JSON. Check the console for details.');
-                }
+                displayData(data);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
