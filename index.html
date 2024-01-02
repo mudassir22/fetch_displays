@@ -25,10 +25,6 @@
         // Use the GET method explicitly
         fetch('https://dbc2-122-160-48-182.ngrok-free.app/displayInfo/', {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                // Add any additional headers if needed
-            },
         })
             .then(response => {
                 if (!response.ok) {
