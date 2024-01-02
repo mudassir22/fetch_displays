@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Data from Server</title>
+    <style>
+        #data-container {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<div id="data-container">
+    <!-- Display data here -->
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', fetchData);
+
+    function fetchData() {
+        fetch('https://9640-122-160-48-182.ngrok-free.app/displayInfo/')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                console.log('Received data:', data);
+                try {
+                    const jsonData = JSON.parse(data);
+                    displayData(jsonData);
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                    displayError('Error parsing JSON. Check the console for details.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                displayError('Error fetching data. Check the console for details.');
+            });
+    }
+
+    function displayData(data) {
+        const dataContainer = document.getElementById('data-container');
+
+        // Clear previous data
+        dataContainer.innerHTML = '';
+
+        // Display new data
+        if (Array.isArray(data)) {
+            data.forEach(item => {
+                const displayId = item.display_id || 'N/A';
+                const uniqueUrl = item.unique_url || 'N/A';
+                const macAddress = item.mac_address || 'N/A';
+                const connectivity = item.connectivity || 'N/A';
+
+                const displayInfo = document.createElement('div');
+                displayInfo.innerHTML = `
+                    <p><strong>Display ID:</strong> ${displayId}</p>
+                    <p><strong>Unique URL:</strong> ${uniqueUrl}</p>
+                    <p><strong>MAC Address:</strong> ${macAddress}</p>
+                    <p><strong>Connectivity:</strong> ${connectivity}</p>
+                    <hr>
+                `;
+
+                dataContainer.appendChild(displayInfo);
+            });
+        } else {
+            console.error('Received data is not an array:', data);
+            displayError('Received data is not in the expected format. Check the console for details.');
+        }
+    }
+
+    function displayError(message) {
+        const dataContainer = document.getElementById('data-container');
+        dataContainer.innerHTML = `<p style="color: red;">${message}</p>`;
+    }
+</script>
+
+</body>
+</html>
+
